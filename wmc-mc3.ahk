@@ -2,21 +2,34 @@
 #Warn   ; Enable warnings to assist with detecting common errors.
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
+SetTitleMatchMode, 2
 
 ; Home button. Simulate the green button on the original remote.
 ; We could just send Win+Alt+Enter, which is what the green button translates to,
 ; but I found this solution faster and more robust.
+;  Browser_Home::
+;  	Process,Exist, ehshell.exe
+;  	If ( ErrorLevel = 0 )
+;     	{
+;  		Run, "C:\Windows\ehome\ehshell.exe"
+;  	}
+;  	Else
+;  		Send, #!{Enter}
+;  Return
+
+#IfWinNotActive, Kodi
+
 Browser_Home::
-	Process,Exist, ehshell.exe
-	If ( ErrorLevel = 0 )
-   	{
-		Run, "C:\Windows\ehome\ehshell.exe"
-	}
-	Else
-		Send, #!{Enter}
+		Run, "C:\Program Files (x86)\Kodi\kodi.exe"
 Return
 
-; The rest of the mappings are only active within WMC. Outside of WMC they perform according to their defaults.
+
+#IfWinActive, Kodi
+
+Browser_Home::
+	send, ^!{VK74} ; if Kodi is Active (GSB Home Jump will activate)
+Return 
+
 #IfWinActive, Windows Media Center
 
 
@@ -33,6 +46,7 @@ Return
 ; Mail button. Do nothing.
 Launch_Mail::
 Return
+
 
 ; Play/Pause button. "Stop" on double click.
 Media_Play_Pause::
@@ -52,3 +66,17 @@ Return
 ; AppsKey::
 ;  Send, AppsKey
 ; Return
+
+
+#IfWinActive, VLC media player
+
+
+; Left = Ctrl + Left to skip back 1 minute
+Left::
+  Send, ^{Left}
+Return
+
+; Riught = Ctrl + Right to skip forward 1 minute
+Right::
+  Send, ^{Right}
+Return
