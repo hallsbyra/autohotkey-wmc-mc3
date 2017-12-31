@@ -21,6 +21,8 @@ SetTitleMatchMode, 2
 
 Browser_Home::
 		Run, "C:\Program Files (x86)\Kodi\kodi.exe"
+		WinWait Kodi
+		WinActivate Kodi
 Return
 
 
